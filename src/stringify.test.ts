@@ -641,3 +641,62 @@ describe('RFC 9557 format', () => {
     expect(result).toBe('2025[u-ca=gregory]');
   });
 });
+
+describe('BC dates (negative years)', () => {
+  it('should stringify BC date (negative year)', () => {
+    // Manually construct AST for 44 BC (year -43 in ISO 8601, since year 0 exists)
+    const result = stringifyDate({ kind: 'Date', year: -43, month: 3, day: 15 });
+    expect(result).toBe('-0043-03-15');
+  });
+
+  it('should stringify BC year only', () => {
+    const result = stringifyDate({ kind: 'Date', year: -100 });
+    expect(result).toBe('-0100');
+  });
+
+  it('should stringify BC year-month', () => {
+    const result = stringifyDate({ kind: 'Date', year: -753, month: 4 });
+    expect(result).toBe('-0753-04');
+  });
+
+  it('should stringify year 1 BC (year 0 in ISO 8601)', () => {
+    const result = stringifyDate({ kind: 'Date', year: 0, month: 1, day: 1 });
+    expect(result).toBe('0000-01-01');
+  });
+
+  it('should stringify BC datetime', () => {
+    const result = stringifyDateTime({
+      kind: 'DateTime',
+      date: { kind: 'Date', year: -43, month: 3, day: 15 },
+      time: { kind: 'Time', hour: 12, minute: 0, second: 0 },
+      annotations: [],
+    });
+    expect(result).toBe('-0043-03-15T12:00:00');
+  });
+
+  it('should handle negative year padding', () => {
+    const result = stringifyDate({ kind: 'Date', year: -1, month: 1, day: 1 });
+    expect(result).toBe('-0001-01-01');
+  });
+
+  it('should round-trip BC date parsing and stringifying', () => {
+    const input = '-0044-03-15';
+    const ast = parseTemporal(input);
+    const result = stringifyTemporal(ast);
+    expect(result).toBe(input);
+  });
+
+  it('should round-trip BC year only', () => {
+    const input = '-0100';
+    const ast = parseTemporal(input);
+    const result = stringifyTemporal(ast);
+    expect(result).toBe(input);
+  });
+
+  it('should round-trip BC datetime', () => {
+    const input = '-0044-03-15T12:00:00Z';
+    const ast = parseTemporal(input);
+    const result = stringifyTemporal(ast);
+    expect(result).toBe(input);
+  });
+});

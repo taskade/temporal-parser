@@ -43,7 +43,17 @@ export function stringifyTemporal(ast: TemporalAst): string {
  * @returns Date string (YYYY, YYYY-MM, or YYYY-MM-DD)
  */
 export function stringifyDate(date: DateAst): string {
-  const parts: string[] = [date.year.toString().padStart(4, '0')];
+  // Handle negative years (BC dates) - ISO 8601 uses negative years
+  // Year 0 = 1 BC, Year -1 = 2 BC, etc.
+  let yearStr: string;
+  if (date.year < 0) {
+    // For negative years, pad the absolute value and prepend the minus sign
+    yearStr = '-' + Math.abs(date.year).toString().padStart(4, '0');
+  } else {
+    yearStr = date.year.toString().padStart(4, '0');
+  }
+
+  const parts: string[] = [yearStr];
 
   if (date.month != null) {
     parts.push(date.month.toString().padStart(2, '0'));

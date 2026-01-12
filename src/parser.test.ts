@@ -32,6 +32,63 @@ describe('parseTemporal', () => {
         annotations: [],
       });
     });
+
+    it('should parse BC date (negative year)', () => {
+      const ast = parseTemporal('-0044-03-15');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { kind: 'Date', year: -44, month: 3, day: 15 },
+        annotations: [],
+      });
+    });
+
+    it('should parse BC year only', () => {
+      const ast = parseTemporal('-0100');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { kind: 'Date', year: -100 },
+        annotations: [],
+      });
+    });
+
+    it('should parse BC year-month', () => {
+      const ast = parseTemporal('-0753-04');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { kind: 'Date', year: -753, month: 4 },
+        annotations: [],
+      });
+    });
+
+    it('should parse year 0 (1 BC in ISO 8601)', () => {
+      const ast = parseTemporal('0000-01-01');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { kind: 'Date', year: 0, month: 1, day: 1 },
+        annotations: [],
+      });
+    });
+
+    it('should parse BC datetime with time', () => {
+      const ast = parseTemporal('-0044-03-15T12:00:00');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { kind: 'Date', year: -44, month: 3, day: 15 },
+        time: { kind: 'Time', hour: 12, minute: 0, second: 0 },
+        annotations: [],
+      });
+    });
+
+    it('should parse BC datetime with timezone', () => {
+      const ast = parseTemporal('-0044-03-15T12:00:00Z');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { kind: 'Date', year: -44, month: 3, day: 15 },
+        time: { kind: 'Time', hour: 12, minute: 0, second: 0 },
+        offset: { kind: 'UtcOffset' },
+        annotations: [],
+      });
+    });
   });
 
   describe('time parsing', () => {

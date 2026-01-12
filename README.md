@@ -42,6 +42,10 @@ const duration = parseTemporal('P1Y2M3DT4H5M6S');
 // Parse a date range
 const range = parseTemporal('2025-01-01/2025-12-31');
 // { kind: 'Range', start: {...}, end: {...} }
+
+// Parse BC dates (negative years in ISO 8601)
+const bcDate = parseTemporal('-0044-03-15');
+// { kind: 'DateTime', date: { year: -44, month: 3, day: 15 }, ... }
 ```
 
 ## Supported Formats
@@ -50,6 +54,7 @@ const range = parseTemporal('2025-01-01/2025-12-31');
 - Year: `2025`
 - Year-Month: `2025-01`
 - Full date: `2025-01-12`
+- BC dates (negative years): `-0044-03-15` (44 BC), `0000-01-01` (1 BC)
 
 ### Times
 - Hour-Minute: `T10:30`

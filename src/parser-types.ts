@@ -22,6 +22,10 @@ export type DateTimeAst = {
 
 export type DateAst = {
   kind: 'Date';
+  /**
+   * Components are receivable by Temporal.PlainDate.from().
+   * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/PlainDate/from
+   */
   year: number;
   month?: number;
   day?: number;
@@ -29,6 +33,10 @@ export type DateAst = {
 
 export type TimeAst = {
   kind: 'Time';
+  /**
+   * Components are receivable by Temporal.PlainTime.from().
+   * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/PlainTime/from
+   */
   hour: number;
   minute: number;
   second?: number;
@@ -61,8 +69,10 @@ export type AnnotationAst = {
 
 export type DurationAst = {
   kind: 'Duration';
-  // Keep both parsed fields and the original string form.
-  // Months vs minutes ambiguity is handled by position (date part vs time part).
+  // ISO 8601 duration components (P1Y2M3DT4H5M6S)
+  // Note: 'M' is disambiguated by position - months in date part, minutes in time part
+  // Components are compatible with Temporal.Duration.from()
+  // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/Duration/from
   years?: number;
   months?: number;
   weeks?: number;

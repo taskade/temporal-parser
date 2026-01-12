@@ -15,6 +15,19 @@ export { parseTemporal } from './parser.js';
 // Export offset parser (useful standalone utility)
 export { parseOffset } from './parseOffset.js';
 
+// Export stringify functionality
+export {
+  stringifyAnnotation,
+  stringifyDate,
+  stringifyDateTime,
+  stringifyDuration,
+  stringifyOffset,
+  stringifyRange,
+  stringifyTemporal,
+  stringifyTime,
+  stringifyTimeZone,
+} from './stringify.js';
+
 // Export parser types
 export type {
   AnnotationAst,

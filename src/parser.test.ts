@@ -72,6 +72,24 @@ describe('parseTemporal', () => {
         time: { fraction: '123456789' },
       });
     });
+
+    it('should parse fractional seconds with comma (European format)', () => {
+      const ast = parseTemporal('2025-01-07T10:30:45,123');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        date: { year: 2025, month: 1, day: 7 },
+        time: { hour: 10, minute: 30, second: 45, fraction: '123' },
+        annotations: [],
+      });
+    });
+
+    it('should parse fractional seconds with comma and high precision', () => {
+      const ast = parseTemporal('2025-01-07T10:30:45,123456789');
+      expect(ast).toMatchObject({
+        kind: 'DateTime',
+        time: { fraction: '123456789' },
+      });
+    });
   });
 
   describe('timezone parsing', () => {
@@ -366,6 +384,16 @@ describe('parseTemporal', () => {
         seconds: 1,
         secondsFraction: '5',
         raw: 'PT1.5S',
+      });
+    });
+
+    it('should parse fractional seconds with comma (European format)', () => {
+      const ast = parseTemporal('PT1,5S');
+      expect(ast).toMatchObject({
+        kind: 'Duration',
+        seconds: 1,
+        secondsFraction: '5',
+        raw: 'PT1,5S',
       });
     });
 

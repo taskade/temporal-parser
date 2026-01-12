@@ -526,6 +526,18 @@ describe('format normalization', () => {
     const result = stringifyTemporal(ast);
     expect(result).toBe('2025-01-12T10:00:00-08:00');
   });
+
+  it('should normalize comma decimal separator to dot', () => {
+    const ast = parseTemporal('2025-01-12T10:30:45,123');
+    const result = stringifyTemporal(ast);
+    expect(result).toBe('2025-01-12T10:30:45.123');
+  });
+
+  it('should normalize comma in duration to dot', () => {
+    const ast = parseTemporal('PT1,5S');
+    const result = stringifyTemporal(ast);
+    expect(result).toBe('PT1.5S');
+  });
 });
 
 describe('edge cases', () => {

@@ -28,8 +28,7 @@
     "url": "git+https://github.com/taskade/temporal-parser.git"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "access": "public"
   },
   "keywords": [
     "temporal",

@@ -1,0 +1,30 @@
+# Source files
+src/
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+
+# Development files
+scripts/
+tsconfig.json
+tsconfig.eslint.json
+vitest.config.ts
+eslint.config.js
+.gitignore
+.npmignore
+.npmrc
+
+# Build artifacts
+coverage/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# CI/CD
+.github/
+
+# Documentation that shouldn't be published
+CHANGES.md

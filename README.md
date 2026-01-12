@@ -100,6 +100,34 @@ const offset = parseOffset('+08:00');
 // { kind: 'NumericOffset', sign: '+', hours: 8, minutes: 0, raw: '+08:00' }
 ```
 
+### Stringify AST Back to String
+
+```typescript
+import { parseTemporal, stringifyTemporal } from '@taskade/temporal-parser';
+
+// Parse and stringify
+const ast = parseTemporal('2025-01-12T10:00:00+08:00[Asia/Singapore]');
+const str = stringifyTemporal(ast);
+// '2025-01-12T10:00:00+08:00[Asia/Singapore]'
+
+// Offsets are normalized to canonical format (±HH:MM)
+const ast2 = parseTemporal('2025-01-12T10:00:00+0530'); // Compact format
+const str2 = stringifyTemporal(ast2);
+// '2025-01-12T10:00:00+05:30' (normalized)
+
+// Stringify individual components
+import { stringifyDate, stringifyTime, stringifyDuration } from '@taskade/temporal-parser';
+
+stringifyDate({ kind: 'Date', year: 2025, month: 1, day: 12 });
+// '2025-01-12'
+
+stringifyTime({ kind: 'Time', hour: 10, minute: 30, second: 45 });
+// '10:30:45'
+
+stringifyDuration({ kind: 'Duration', years: 1, months: 2, raw: 'P1Y2M', annotations: [] });
+// 'P1Y2M'
+```
+
 ## Motivation
 
 Time is one of the most complex human inventions.
@@ -168,6 +196,22 @@ Parses a numeric timezone offset string.
 **Valid ranges:**
 - Hours: 0-14 (UTC-12:00 to UTC+14:00)
 - Minutes: 0-59
+
+### `stringifyTemporal(ast: TemporalAst): string`
+
+Converts a temporal AST back to its string representation.
+
+**Returns:** ISO 8601 / IXDTF formatted string
+
+**Also available:**
+- `stringifyDate(date: DateAst): string`
+- `stringifyTime(time: TimeAst): string`
+- `stringifyDateTime(dateTime: DateTimeAst): string`
+- `stringifyDuration(duration: DurationAst): string`
+- `stringifyRange(range: RangeAst): string`
+- `stringifyOffset(offset: OffsetAst): string`
+- `stringifyTimeZone(timeZone: TimeZoneAst): string`
+- `stringifyAnnotation(annotation: AnnotationAst): string`
 
 ## TypeScript Support
 

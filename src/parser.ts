@@ -175,7 +175,8 @@ class Parser {
       const sTok = this.eat(TokType.Number);
       second = toInt(sTok.value, 'second', this.i);
 
-      if (this.tryEat(TokType.Dot)) {
+      // ISO 8601 allows both . and , as decimal separators for fractional seconds
+      if (this.tryEat(TokType.Dot) || this.tryEat(TokType.Comma)) {
         const fracTok = this.eat(TokType.Number);
         fraction = fracTok.value; // keep raw digits
       }
@@ -332,8 +333,10 @@ class Parser {
       rawParts.push(numTok.value);
 
       let fraction: string | undefined;
-      if (this.tryEat(TokType.Dot)) {
-        rawParts.push('.');
+      // ISO 8601 allows both . and , as decimal separators
+      const dotOrComma = this.tryEat(TokType.Dot) || this.tryEat(TokType.Comma);
+      if (dotOrComma) {
+        rawParts.push(dotOrComma.value); // Preserve the actual separator (. or ,)
         const fracTok = this.eat(TokType.Number);
         rawParts.push(fracTok.value);
         fraction = fracTok.value;

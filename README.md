@@ -55,6 +55,7 @@ const range = parseTemporal('2025-01-01/2025-12-31');
 - Hour-Minute: `T10:30`
 - With seconds: `T10:30:45`
 - With fractional seconds: `T10:30:45.123456789`
+- European format (comma): `T10:30:45,123` (normalized to dot in output)
 
 ### Timezones
 - UTC: `Z`
@@ -65,6 +66,7 @@ const range = parseTemporal('2025-01-01/2025-12-31');
 - Date parts: `P1Y2M3D` (1 year, 2 months, 3 days)
 - Time parts: `PT4H5M6S` (4 hours, 5 minutes, 6 seconds)
 - Combined: `P1Y2M3DT4H5M6S`
+- Fractional seconds: `PT1.5S` or `PT1,5S` (comma normalized to dot)
 
 ### IXDTF Annotations
 - Calendar: `[u-ca=gregory]`

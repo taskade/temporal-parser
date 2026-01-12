@@ -1,5 +1,12 @@
 # @taskade/temporal-parser
 
+## 1.0.1
+
+### Patch Changes
+
+- 7e2bb77: docs: add CHANGELOG.md with 1.0.0 release notes
+- 5165f82: build(ci): Fix GitHub Packages publish workflow to use correct registry. Previously, the GitHub Packages publish step was attempting to publish to npm registry instead of GitHub Packages registry. This adds the explicit `--registry` flag to ensure packages are published to the correct location.
+
 ## 1.0.0
 
 ### Major Changes

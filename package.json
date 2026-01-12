@@ -1,6 +1,6 @@
 {
   "name": "@taskade/temporal-parser",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A lexer/parser based temporal expression parser for ISO 8601 and IXDTF formats",
   "type": "module",
   "main": "./dist/cjs/index.cjs",

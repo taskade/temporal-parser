@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           cache: 'npm'
 
       - name: Install dependencies
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Node.js for npm
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Create Release Pull Request or Publish to npm
@@ -52,14 +52,14 @@ jobs:
           commit: 'chore: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
       # Only publish to GitHub Packages if npm publish succeeded
       - name: Setup Node.js for GitHub Packages
         if: steps.changesets.outputs.published == 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@taskade'
 

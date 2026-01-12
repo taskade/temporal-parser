@@ -10,6 +10,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: write
       packages: write
       pull-requests: write
@@ -49,9 +50,6 @@ jobs:
           publish: npm run release
           title: 'chore: version packages'
           commit: 'chore: version packages'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Only publish to GitHub Packages if npm publish succeeded
       - name: Setup Node.js for GitHub Packages

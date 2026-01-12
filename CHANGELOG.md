@@ -1,5 +1,12 @@
 # @taskade/temporal-parser
 
+## 1.0.4
+
+### Patch Changes
+
+- eb78e97: build(ci): pass GITHUB_TOKEN token to changesets release action
+- 792e265: build(ci): Allow publishing to GitHub Packages by removing the hard-coded npmjs registry from `publishConfig`.
+
 ## 1.0.3
 
 ### Patch Changes

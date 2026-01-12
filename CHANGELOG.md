@@ -1,5 +1,11 @@
 # @taskade/temporal-parser
 
+## 1.0.5
+
+### Patch Changes
+
+- 60b71d8: Enable npm provenance for trusted publishing. Adds NPM_CONFIG_PROVENANCE flag to use OIDC authentication instead of long-lived tokens.
+
 ## 1.0.4
 
 ### Patch Changes

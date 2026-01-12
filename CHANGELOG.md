@@ -1,5 +1,11 @@
 # @taskade/temporal-parser
 
+## 1.0.3
+
+### Patch Changes
+
+- cf18396: build(ci): Allow publishing to GitHub Packages by removing the hard-coded npmjs registry from `publishConfig`.
+
 ## 1.0.2
 
 ### Patch Changes

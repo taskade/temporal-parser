@@ -1,5 +1,11 @@
 # @taskade/temporal-parser
 
+## 1.0.2
+
+### Patch Changes
+
+- 14c6355: build(ci): Fix GitHub Packages publish by skipping prepublishOnly script. The publish workflow now uses --ignore-scripts flag to prevent duplicate builds and avoid registry configuration conflicts.
+
 ## 1.0.1
 
 ### Patch Changes

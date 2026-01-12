@@ -64,6 +64,6 @@ jobs:
 
       - name: Publish to GitHub Packages
         if: steps.changesets.outputs.published == 'true'
-        run: npm publish
+        run: npm publish --registry=https://npm.pkg.github.com
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

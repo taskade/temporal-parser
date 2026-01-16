@@ -91,6 +91,12 @@ class Parser {
       return this.parseDuration();
     }
 
+    // Standalone time format: Number:Number (e.g., 10:30, 10:30:45)
+    // ISO 8601 Clause 5.4: time-only representations
+    if (this.at(TokType.Number) && this.peek(1).type === TokType.Colon) {
+      return this.parseTime();
+    }
+
     // Otherwise parse a date/datetime (common case)
     return this.parseDateTime();
   }
@@ -143,7 +149,7 @@ class Parser {
     // Check for optional leading dash (negative year / BC date)
     // ISO 8601: Year 0 = 1 BC, Year -1 = 2 BC, etc.
     const isNegative = this.tryEat(TokType.Dash);
-    
+
     const yTok = this.eat(TokType.Number);
     let year = toInt(yTok.value, 'year', this.i);
     if (isNegative) {

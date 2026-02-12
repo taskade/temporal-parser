@@ -107,6 +107,39 @@ const offset = parseOffset('+08:00');
 // { kind: 'NumericOffset', sign: '+', hours: 8, minutes: 0, raw: '+08:00' }
 ```
 
+### Standalone Time Parser
+
+```typescript
+import { parseTimeString } from '@taskade/temporal-parser';
+
+// Parse 12-hour format with AM/PM
+const time1 = parseTimeString('2:30 PM');
+// { kind: 'Time', hour: 14, minute: 30 }
+
+// Parse 24-hour format (international)
+const time2 = parseTimeString('14:30');
+// { kind: 'Time', hour: 14, minute: 30 }
+
+// Parse with seconds
+const time3 = parseTimeString('2:30:45 PM');
+// { kind: 'Time', hour: 14, minute: 30, second: 45 }
+
+// Parse with fractional seconds
+const time4 = parseTimeString('14:30:45.123');
+// { kind: 'Time', hour: 14, minute: 30, second: 45, fraction: '123' }
+
+// Flexible AM/PM formats
+parseTimeString('2:30 PM');   // Standard
+parseTimeString('2:30PM');    // No space
+parseTimeString('2:30 pm');   // Lowercase
+parseTimeString('2:30 p.m.'); // With periods
+
+// Special times
+parseTimeString('12:00 AM');  // Midnight (hour: 0)
+parseTimeString('12:00 PM');  // Noon (hour: 12)
+parseTimeString('11:59 PM');  // End of day (hour: 23)
+```
+
 ### Stringify AST Back to String
 
 ```typescript
@@ -203,6 +236,26 @@ Parses a numeric timezone offset string.
 **Valid ranges:**
 - Hours: 0-14 (UTC-12:00 to UTC+14:00)
 - Minutes: 0-59
+
+### `parseTimeString(input: string): TimeAst`
+
+Parses a standalone time string in various formats.
+
+**Supported formats:**
+- 12-hour with AM/PM: `2:30 PM`, `02:30PM`, `2:30 p.m.`
+- 24-hour (international): `14:30`, `02:30`, `23:59`
+- With seconds: `2:30:45 PM`, `14:30:45`
+- With fractional seconds: `2:30:45.123 PM`, `14:30:45,123` (comma or dot)
+
+**Special cases:**
+- `12:00 AM` → midnight (hour: 0)
+- `12:00 PM` → noon (hour: 12)
+- `12:30 AM` → 00:30 (after midnight)
+- `12:30 PM` → 12:30 (after noon)
+
+**Returns:** `TimeAst` object compatible with `Temporal.PlainTime.from()`
+
+**Throws:** `ParseError` if the input is invalid
 
 ### `stringifyTemporal(ast: TemporalAst): string`
 

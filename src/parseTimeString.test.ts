@@ -340,18 +340,15 @@ describe('parseTimeString', () => {
       }
     });
 
-    it('should throw on missing colon with format hint', () => {
-      try {
-        parseTimeString('1430');
-        expect.fail('Should have thrown');
-      } catch (e) {
-        expect(e).toBeInstanceOf(ParseError);
-        const message = (e as ParseError).message;
-        expect(message).toBe(
-          'Invalid time format: "1430". Expected format: "HH:MM" (e.g., "09:00", "14:30") or "H:MM AM/PM" (e.g., "9:07 AM") at token index 1',
-        );
-        console.log('Missing colon error:', message);
-      }
+    it('should parse ISO 8601 basic format: "1430"', () => {
+      const result = parseTimeString('1430');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 14,
+        minute: 30,
+        second: undefined,
+        fraction: undefined,
+      });
     });
 
     it('should throw on invalid hour in 24-hour format with helpful message', () => {
@@ -694,6 +691,285 @@ describe('parseTimeString', () => {
         second: 47,
         fraction: '891',
       });
+    });
+  });
+
+  describe('bare single-digit hours', () => {
+    it('should parse single digit "0" as 00:00', () => {
+      const result = parseTimeString('0');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 0,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse single digit "7" as 07:00', () => {
+      const result = parseTimeString('7');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 7,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse single digit "9" as 09:00', () => {
+      const result = parseTimeString('9');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 9,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse double digit "23" as 23:00', () => {
+      const result = parseTimeString('23');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 23,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "7 AM" as 7:00 AM', () => {
+      const result = parseTimeString('7 AM');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 7,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "12 PM" as 12:00 PM (noon)', () => {
+      const result = parseTimeString('12 PM');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 12,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "12 AM" as 12:00 AM (midnight)', () => {
+      const result = parseTimeString('12 AM');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 0,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "3 pm" (lowercase) as 15:00', () => {
+      const result = parseTimeString('3 pm');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 15,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should throw on "0 AM" (invalid 12-hour format)', () => {
+      try {
+        parseTimeString('0 AM');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+      }
+    });
+
+    it('should throw on "24" (invalid 24-hour format)', () => {
+      try {
+        parseTimeString('24');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid hour for 24-hour format: 24');
+      }
+    });
+
+    it('should throw on "13 AM" (invalid 12-hour format)', () => {
+      try {
+        parseTimeString('13 AM');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid hour for 12-hour format: 13');
+      }
+    });
+  });
+
+  describe('ISO 8601 basic format (compact, no colons)', () => {
+    it('should parse "1430" as 14:30', () => {
+      const result = parseTimeString('1430');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 14,
+        minute: 30,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "0900" as 09:00', () => {
+      const result = parseTimeString('0900');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 9,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "0000" as 00:00 (midnight)', () => {
+      const result = parseTimeString('0000');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 0,
+        minute: 0,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "2359" as 23:59', () => {
+      const result = parseTimeString('2359');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 23,
+        minute: 59,
+        second: undefined,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "143045" as 14:30:45 (with seconds)', () => {
+      const result = parseTimeString('143045');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 14,
+        minute: 30,
+        second: 45,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "090000" as 09:00:00', () => {
+      const result = parseTimeString('090000');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 9,
+        minute: 0,
+        second: 0,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "235959" as 23:59:59', () => {
+      const result = parseTimeString('235959');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 23,
+        minute: 59,
+        second: 59,
+        fraction: undefined,
+      });
+    });
+
+    it('should parse "143045.123" with fractional seconds', () => {
+      const result = parseTimeString('143045.123');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 14,
+        minute: 30,
+        second: 45,
+        fraction: '123',
+      });
+    });
+
+    it('should parse "143045,123" with comma separator', () => {
+      const result = parseTimeString('143045,123');
+      expect(result).toEqual({
+        kind: 'Time',
+        hour: 14,
+        minute: 30,
+        second: 45,
+        fraction: '123',
+      });
+    });
+
+    it('should throw on invalid basic format hour "2430"', () => {
+      try {
+        parseTimeString('2430');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid hour for 24-hour format: 24');
+      }
+    });
+
+    it('should throw on invalid basic format minute "1460"', () => {
+      try {
+        parseTimeString('1460');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid minute: 60');
+      }
+    });
+
+    it('should throw on invalid basic format second "143060"', () => {
+      try {
+        parseTimeString('143060');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid second: 60');
+      }
+    });
+
+    it('should not confuse 3-digit number "123" with basic format', () => {
+      // "123" should be treated as bare hour 123, which will fail validation
+      try {
+        parseTimeString('123');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid hour for 24-hour format: 123');
+      }
+    });
+
+    it('should not confuse 5-digit number "12345" with basic format', () => {
+      // "12345" should be treated as bare hour 12345, which will fail validation
+      try {
+        parseTimeString('12345');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).toBeInstanceOf(ParseError);
+        const message = (e as ParseError).message;
+        expect(message).toContain('Invalid hour for 24-hour format: 12345');
+      }
     });
   });
 });

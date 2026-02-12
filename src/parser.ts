@@ -143,7 +143,7 @@ class Parser {
     // Check for optional leading dash (negative year / BC date)
     // ISO 8601: Year 0 = 1 BC, Year -1 = 2 BC, etc.
     const isNegative = this.tryEat(TokType.Dash);
-    
+
     const yTok = this.eat(TokType.Number);
     let year = toInt(yTok.value, 'year', this.i);
     if (isNegative) {

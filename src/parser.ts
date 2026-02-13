@@ -91,6 +91,12 @@ class Parser {
       return this.parseDuration();
     }
 
+    // Standalone time format: Number:Number (e.g., 10:30, 10:30:45)
+    // ISO 8601 Clause 5.4: time-only representations
+    if (this.at(TokType.Number) && this.peek(1).type === TokType.Colon) {
+      return this.parseTime();
+    }
+
     // Otherwise parse a date/datetime (common case)
     return this.parseDateTime();
   }

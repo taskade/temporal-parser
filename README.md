@@ -2,6 +2,25 @@
 
 A lexer and parser for ISO 8601, RFC 3339, and IXDTF temporal expressions, built with compiler design principles.
 
+By [Stan Chang](https://lxcid.com/) ([@lxcid](https://github.com/lxcid)).
+
+[![npm](https://img.shields.io/npm/v/@taskade/temporal-parser?style=flat-square&color=FF2D60)](https://www.npmjs.com/package/@taskade/temporal-parser)
+[![npm downloads](https://img.shields.io/npm/dm/@taskade/temporal-parser?style=flat-square)](https://www.npmjs.com/package/@taskade/temporal-parser)
+[![CI](https://img.shields.io/github/actions/workflow/status/taskade/temporal-parser/ci.yml?branch=main&style=flat-square)](https://github.com/taskade/temporal-parser/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/taskade/temporal-parser?style=flat-square)](./LICENSE.md)
+
+**Try it:** [interactive playground](https://lxcid.com/tools/temporal-playground/) · write-up: [announcing @taskade/temporal-parser](https://lxcid.com/2026/01/15/announcing-temporal-parser/) · sibling: [`@taskade/uri-parser`](https://github.com/taskade/uri-parser)
+
+## When to use this
+
+This library lexes and parses a temporal *string* into a typed AST (and stringifies it back). It does not do date math, and it does not validate calendar ranges.
+
+| Need | Use |
+| --- | --- |
+| ISO 8601 / RFC 3339 / IXDTF / durations / ranges → AST | **this package** |
+| Date/time *values*, arithmetic, calendars | [TC39 Temporal](https://tc39.es/proposal-temporal/docs/) (`PlainDate.from`, …). Temporal has no general `parse()` for these forms — feed it fields from the AST |
+| Format, locale, “add 3 days” on a `Date` | [luxon](https://github.com/moment/luxon) or [date-fns](https://github.com/date-fns/date-fns) |
+
 ## Features
 
 - **Standards compliant**: ISO 8601, RFC 3339, and IXDTF support
@@ -10,7 +29,7 @@ A lexer and parser for ISO 8601, RFC 3339, and IXDTF temporal expressions, built
 - **Type-safe**: Written in TypeScript with full type definitions
 - **Small footprint**: ~18KB minified
 - **Dual module support**: ESM and CommonJS builds
-- **Well tested**: 91% test coverage with 271 test cases
+- **Well tested**: 91% test coverage with 461 test cases
 
 ## Installation
 
@@ -291,13 +310,13 @@ import type {
 } from '@taskade/temporal-parser';
 ```
 
+## Related
+
+- [`@taskade/uri-parser`](https://github.com/taskade/uri-parser) — same compiler approach for URIs (RFC 3986)
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup and guidelines.
-
-## Development
-
-This project was developed with LLM assistance (GPT 5.2/Claude Sonnet 4.5), under human direction for design decisions, architecture, and verification. All code is tested and reviewed on a best-effort basis.
 
 ## License
 

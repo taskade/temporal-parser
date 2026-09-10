@@ -1,5 +1,11 @@
 # @taskade/temporal-parser
 
+## 1.2.2
+
+### Patch Changes
+
+- 20445e4: Relax `engines.node` from `>=22` to `>=20` (the lowest line the Vitest 4 suite can run). CI now tests 20, 22, and 24. Node 18 is EOL and is not claimed. Docs-only: badges, playground link, and a “when to use this vs Temporal / luxon / date-fns” table. No parser or API changes.
+
 ## 1.2.1
 
 ### Patch Changes

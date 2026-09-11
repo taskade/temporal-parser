@@ -149,6 +149,79 @@ describe('parseTemporal', () => {
     });
   });
 
+  describe('standalone time parsing (ISO 8601 Clause 5.4)', () => {
+    it('should parse time with hour and minute (HH:MM)', () => {
+      const ast = parseTemporal('10:30');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 10,
+        minute: 30,
+      });
+    });
+
+    it('should parse time with seconds (HH:MM:SS)', () => {
+      const ast = parseTemporal('10:30:45');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 10,
+        minute: 30,
+        second: 45,
+      });
+    });
+
+    it('should parse time with fractional seconds (HH:MM:SS.fff)', () => {
+      const ast = parseTemporal('10:30:45.123');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 10,
+        minute: 30,
+        second: 45,
+        fraction: '123',
+      });
+    });
+
+    it('should parse time with high-precision fractional seconds', () => {
+      const ast = parseTemporal('23:59:59.999999999');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 23,
+        minute: 59,
+        second: 59,
+        fraction: '999999999',
+      });
+    });
+
+    it('should parse time with comma decimal separator (European format)', () => {
+      const ast = parseTemporal('10:30:45,123');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 10,
+        minute: 30,
+        second: 45,
+        fraction: '123',
+      });
+    });
+
+    it('should parse midnight', () => {
+      const ast = parseTemporal('00:00:00');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 0,
+        minute: 0,
+        second: 0,
+      });
+    });
+
+    it('should parse noon with reduced precision', () => {
+      const ast = parseTemporal('12:00');
+      expect(ast).toMatchObject({
+        kind: 'Time',
+        hour: 12,
+        minute: 0,
+      });
+    });
+  });
+
   describe('timezone parsing', () => {
     it('should parse Z timezone', () => {
       const ast = parseTemporal('2025-01-07T10:00:00Z');
@@ -598,6 +671,51 @@ describe('parseTemporal', () => {
           kind: 'DateTime',
           offset: { kind: 'UtcOffset' },
         },
+      });
+    });
+
+    it('should parse time range', () => {
+      const ast = parseTemporal('10:00/12:00');
+      expect(ast).toMatchObject({
+        kind: 'Range',
+        start: {
+          kind: 'Time',
+          hour: 10,
+          minute: 0,
+        },
+        end: {
+          kind: 'Time',
+          hour: 12,
+          minute: 0,
+        },
+      });
+    });
+
+    it('should parse open-start time range', () => {
+      const ast = parseTemporal('/23:59:59');
+      expect(ast).toMatchObject({
+        kind: 'Range',
+        start: null,
+        end: {
+          kind: 'Time',
+          hour: 23,
+          minute: 59,
+          second: 59,
+        },
+      });
+    });
+
+    it('should parse open-end time range', () => {
+      const ast = parseTemporal('00:00:00/');
+      expect(ast).toMatchObject({
+        kind: 'Range',
+        start: {
+          kind: 'Time',
+          hour: 0,
+          minute: 0,
+          second: 0,
+        },
+        end: null,
       });
     });
   });

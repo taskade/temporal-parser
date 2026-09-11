@@ -9,7 +9,7 @@ export type RangeAst = {
   end: ValueAst | null; // null => open end
 };
 
-export type ValueAst = DateTimeAst | DurationAst;
+export type ValueAst = DateTimeAst | DurationAst | TimeAst;
 
 export type DateTimeAst = {
   kind: 'DateTime';

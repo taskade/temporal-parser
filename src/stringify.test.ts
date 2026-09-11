@@ -467,6 +467,24 @@ describe('stringifyTemporal', () => {
     const result = stringifyTemporal(ast);
     expect(result).toBe('2025-01-01/2025-12-31');
   });
+
+  it('should stringify standalone time', () => {
+    const ast = parseTemporal('10:30:45');
+    const result = stringifyTemporal(ast);
+    expect(result).toBe('10:30:45');
+  });
+
+  it('should stringify standalone time with reduced precision', () => {
+    const ast = parseTemporal('10:30');
+    const result = stringifyTemporal(ast);
+    expect(result).toBe('10:30');
+  });
+
+  it('should stringify standalone time with fractional seconds', () => {
+    const ast = parseTemporal('10:30:45.123');
+    const result = stringifyTemporal(ast);
+    expect(result).toBe('10:30:45.123');
+  });
 });
 
 describe('round-trip parsing', () => {
@@ -483,6 +501,11 @@ describe('round-trip parsing', () => {
     '2025-01-12T10:00:00+08:00[Asia/Singapore]',
     '2025-01-12T10:00:00Z[u-ca=gregory]',
     '2025-01-12T10:00:00+08:00[Asia/Singapore][u-ca=gregory]',
+    '10:30',
+    '10:30:45',
+    '10:30:45.123',
+    '00:00:00',
+    '23:59:59.999999999',
     'P1Y',
     'P1Y2M',
     'P1Y2M3D',
@@ -497,6 +520,9 @@ describe('round-trip parsing', () => {
     '2025-01-01/',
     '2025-01-01/P1Y',
     'P1D/P7D',
+    '10:00/12:00',
+    '/23:59:59',
+    '00:00:00/',
   ];
 
   testCases.forEach((input) => {

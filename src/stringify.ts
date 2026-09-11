@@ -33,6 +33,9 @@ export function stringifyTemporal(ast: TemporalAst): string {
   if (ast.kind === 'Duration') {
     return stringifyDuration(ast);
   }
+  if (ast.kind === 'Time') {
+    return stringifyTime(ast);
+  }
   return stringifyDateTime(ast);
 }
 
@@ -216,13 +219,17 @@ export function stringifyRange(range: RangeAst): string {
   const start = range.start
     ? range.start.kind === 'Duration'
       ? stringifyDuration(range.start)
-      : stringifyDateTime(range.start)
+      : range.start.kind === 'Time'
+        ? stringifyTime(range.start)
+        : stringifyDateTime(range.start)
     : '';
 
   const end = range.end
     ? range.end.kind === 'Duration'
       ? stringifyDuration(range.end)
-      : stringifyDateTime(range.end)
+      : range.end.kind === 'Time'
+        ? stringifyTime(range.end)
+        : stringifyDateTime(range.end)
     : '';
 
   return `${start}/${end}`;

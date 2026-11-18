@@ -14,7 +14,7 @@ import type { TimeAst } from './parser-types.js';
  * Supports: locale time ("9:07 AM"), 24h ("09:00", "14:30"), ISO 8601 basic format ("1430"),
  * short 24h ("9:00"), bare hours ("7", "7 AM"), and 12h with lowercase period ("9:07 am").
  *
- * TAA (LLM) often generates time in 24h format ("09:00") instead of the locale
+ * An AI agent often generates time in 24h format ("09:00") instead of the locale
  * format ("9:00 AM") that Luxon's 't' token expects.
  *
  * Supported formats:
